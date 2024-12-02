@@ -9,6 +9,35 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      petroglyphs: {
+        Row: {
+          created_at: string
+          engraved_by: string
+          engraving: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          engraved_by?: string
+          engraving?: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          engraved_by?: string
+          engraving?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petroglyphs_engraved_by_fkey"
+            columns: ["engraved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar: string | null

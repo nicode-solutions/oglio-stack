@@ -20,8 +20,8 @@ const Navbar = ({ user }: NavbarProps) => {
                 <div>
                     {user ? (
                         <div className="flex gap-8 items-center">
-                            <Link href="/private" className="uppercase font-bold underline hover:no-underline">
-                                Private
+                            <Link href="/petroglyphs" className="uppercase font-bold underline hover:no-underline">
+                                Petroglyphs
                             </Link>
                             <UserMenu user={user} />
                         </div>
