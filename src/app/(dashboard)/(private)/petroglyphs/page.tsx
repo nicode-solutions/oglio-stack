@@ -52,30 +52,32 @@ export default async function PetroglyphsPage() {
     const petroglyphs = await getPetrolgyphs();
 
     return (
-        <div className="mx-auto max-w-md">
-            <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200 py-8">Petroglyphs</h1>
-            <form action={addPetroglyphAction}>
-                <div className="mb-4">
-                    <label
-                        htmlFor="engraving"
-                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                    >
-                        Engraving
-                    </label>
-                    <input
-                        type="text"
-                        id="engraving"
-                        name="engraving"
-                        className="shadown-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    />
+        <div className="bg-primary bg-opacity-20 min-h-screen p-8">
+            <div className="bg-white dark:bg-gray-900 mx-auto max-w-xl md:min-w-96 shadow-md rounded-lg px-8 py-6">
+                <h1 className="text-2xl font-bold text-center mb-4 dark:text-gray-200 py-8">Petroglyphs 🪨</h1>
+                <form action={addPetroglyphAction}>
+                    <div className="mb-4">
+                        <label
+                            htmlFor="engraving"
+                            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                        >
+                            Engraving
+                        </label>
+                        <input
+                            type="text"
+                            id="engraving"
+                            name="engraving"
+                            className="shadown-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        />
 
-                </div>
+                    </div>
+                    <div className="mb-4">
+                        <FormButton text="Add Petroglyph" />
+                    </div>
+                </form>
                 <div className="mb-4">
-                    <FormButton text="Add Petroglyph" />
+                    <Table petroglyphs={petroglyphs} />
                 </div>
-            </form>
-            <div className="mb-4">
-                <Table petroglyphs={petroglyphs} />
             </div>
         </div>
     );
