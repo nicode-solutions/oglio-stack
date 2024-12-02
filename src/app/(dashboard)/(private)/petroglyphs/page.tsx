@@ -4,8 +4,6 @@ import { Table } from "./_components/table";
 import { Tables } from "@/types/supabase";
 
 export default async function PetroglyphsPage() {
-
-
     /**
      * Asynchronous function to handle the addition of a petroglyph.
      * 
