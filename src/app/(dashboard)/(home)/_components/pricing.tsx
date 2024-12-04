@@ -1,7 +1,3 @@
-import { Button } from "@/components/ui/button";
-
-const priceId = process.env.NEXT_PUBLIC_PRICE_ID;
-
 export const Pricing = () => {
     return (
         <div className="bg-white py-24 sm:py-32" id="pricing">
