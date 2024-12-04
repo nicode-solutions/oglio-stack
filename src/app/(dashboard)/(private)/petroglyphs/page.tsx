@@ -1,6 +1,6 @@
 import { FormButton } from "@/components/ui/form-button";
 import { createClient } from "@/utils/supabase/server";
-import { Table } from "./_components/table";
+import Table from "./_components/table";
 import { Tables } from "@/types/supabase";
 
 export default async function PetroglyphsPage() {

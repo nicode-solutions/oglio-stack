@@ -1,10 +1,19 @@
 import { Tables } from "@/types/supabase"
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface TableProps {
     petroglyphs: Tables<"petroglyphs">[]
 }
 
-export const Table = ({ petroglyphs }: TableProps) => {
+const PetroglyphsTable = ({ petroglyphs }: TableProps) => {
     const formatTimestamp = (timestamp: string): string => {
         const date = new Date(timestamp);
         const day = String(date.getUTCDate()).padStart(2, "0");
@@ -18,27 +27,36 @@ export const Table = ({ petroglyphs }: TableProps) => {
     };
 
     return (
-        <div className="overflow-x-auto">
-            <table className="table">
-                {/* head */}
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Date</th>
-                        <th>Engraving</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {petroglyphs.map((petroglyph, index) => (
-                        <tr key={index}>
-                            <th>{index + 1}</th>
-                            <td>{formatTimestamp(petroglyph.created_at)}</td>
-                            <td>{petroglyph.engraving}</td>
-                        </tr>
-                    ))}
+        <Card className="w-full">
 
-                </tbody>
-            </table>
-        </div>
+            <CardHeader>
+                <CardTitle>Petroglyphs</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="rounded-md border">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">No.</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Engraving</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {petroglyphs.map((petroglyph, index) => (
+                                <TableRow key={petroglyph.id}>
+                                    <TableCell className="font-medium">{index + 1}</TableCell>
+                                    <TableCell>{formatTimestamp(petroglyph.created_at)}</TableCell>
+                                    <TableCell>{petroglyph.engraving}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            </CardContent>
+        </Card>
+
     )
 }
+
+export default PetroglyphsTable
