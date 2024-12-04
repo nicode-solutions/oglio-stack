@@ -18,8 +18,7 @@ export const Hero = () => {
                     <div>
                         <h1 className="text-3xl md:text-6xl font-bold">OglioStack v0.1.0 🏞️</h1>
                         <p className="py-6 text-xl md:text-3xl">
-                            It&apos;s time to code like a senior, with Next.js, React,
-                            Typescript and Supabase.
+                            Just another Open Source NextJS boilerplate
                         </p>
                         <Button asChild>
                             <Link href="/#pricing">Get started</Link>
