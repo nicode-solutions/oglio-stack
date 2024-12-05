@@ -1,6 +1,13 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
 
+
+/**
+ * Middleware function to handle incoming requests and update the session.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {Promise<void>} A promise that resolves when the session is updated.
+ */
 export async function middleware(request: NextRequest) {
     return await updateSession(request)
 }

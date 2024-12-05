@@ -15,7 +15,7 @@ OglioStack is an open source full stack web development boilerplate developed by
 #### Generate Supabase Types
 ```bash
 export PROJECT_REF="pdqnmyvrdycjiycjzacl"
-npx supabase gen types typescript --project-id "$PROJECT_REF" --schema public > src/types/supabase.ts
+pnpx supabase gen types typescript --project-id "$PROJECT_REF" --schema public > src/types/supabase.ts
 ```
 
 ### Notes
