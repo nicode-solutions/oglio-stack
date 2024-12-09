@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormButton } from "@/components/ui/form-button";
 import { Logo } from "@/components/icons/logo";
-import { FormState, registerAction } from "../action";
+import { FormState, registerAction } from "../actions";
 import { useActionState } from "react";
 
 const initialState: FormState = {

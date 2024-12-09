@@ -23,6 +23,9 @@ const Navbar = ({ user }: NavbarProps) => {
                             <Link href="/petroglyphs" className="uppercase font-bold underline hover:no-underline">
                                 Petroglyphs
                             </Link>
+                            <Link href="/billing" className="uppercase font-bold underline hover:no-underline">
+                                Billing
+                            </Link>
                             <UserMenu user={user} />
                         </div>
                     ) : (

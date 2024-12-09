@@ -1,4 +1,4 @@
-import { syncPlans } from "@/app/actions"
+import { syncPlans } from "../actions";
 
 export default async function BillingPage() {
 

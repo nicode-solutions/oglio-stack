@@ -3,6 +3,7 @@
 import { getProduct, listPrices, listProducts, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 
+// Syncs all the plans from Lemon Squeezy to the database.
 export async function syncPlans() {
     configureLemonSqueezy();
 
@@ -54,18 +55,24 @@ export async function syncPlans() {
                 ? currentPriceObj?.attributes.unit_price_decimal
                 : currentPriceObj.attributes.unit_price;
 
-            const priceString = price !== null ? (price?.toString() ?? "") : "";
+            const isSubscription =
+                currentPriceObj?.attributes.category === "subscription";
+
+            // If not a subscription, skip it.
+            if (!isSubscription) {
+                continue;
+            }
 
             console.log({
+                id: v.id,
                 name: variant.name,
                 description: variant.description,
-                price: priceString,
+                price,
                 interval: interval ?? null,
                 interval_count: intervalCount ?? null,
                 is_usage_based: isUsageBased,
                 product_id: variant.product_id,
                 product_name: productName,
-                variant_id: parseInt(v.id) as unknown as number,
                 trial_interval: trialInterval ?? null,
                 trial_interval_count: trialIntervalCount ?? null,
                 sort: variant.sort,
