@@ -1,8 +1,10 @@
 import { Database } from '@/types/supabase'
 import { createServerClient } from '@supabase/ssr'
+import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
-export async function createClient() {
+// For SSR user-specific operations
+export async function createSSRClient() {
   const cookieStore = await cookies()
 
   return createServerClient<Database>(
@@ -27,4 +29,12 @@ export async function createClient() {
       },
     }
   )
+}
+
+// For backend privileged operations
+export function createServiceClient() {
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_KEY!
+  );
 }

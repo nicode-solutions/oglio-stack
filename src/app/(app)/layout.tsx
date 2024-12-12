@@ -1,6 +1,6 @@
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
-import { createClient } from "@/utils/supabase/server";
+import { createSSRClient } from "@/utils/supabase/server";
 import Script from "next/script";
 
 
@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }>) {
 
-  const supabase = await createClient();
+  const supabase = await createSSRClient();
 
   const { data } = await supabase.auth.getUser();
 

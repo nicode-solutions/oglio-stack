@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createSSRClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
 export type FormState = {
@@ -20,7 +20,7 @@ export const registerAction = async (prevState: FormState, formData: FormData) =
         };
     }
 
-    const supabase = await createClient();
+    const supabase = await createSSRClient();
     const { data, error } = await supabase.auth.signUp({
         email,
         password
@@ -41,7 +41,7 @@ export const registerAction = async (prevState: FormState, formData: FormData) =
 }
 
 export const loginAction = async (formData: FormData) => {
-    const supabase = await createClient();
+    const supabase = await createSSRClient();
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;

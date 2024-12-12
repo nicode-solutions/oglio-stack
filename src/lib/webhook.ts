@@ -2,7 +2,7 @@
 import { getPrice } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables, Json } from "@/types/supabase";
-import { createClient } from "@/utils/supabase/server";
+import { createServiceClient } from "@/utils/supabase/server";
 import { webhookHasData, webhookHasMeta } from "@/lib/typeguards";
 
 /**
@@ -15,7 +15,7 @@ export async function storeWebhookEvent(
     eventName: string,
     body: Json,
 ): Promise<Tables<'webhook_event'> | undefined> {
-    const supabase = await createClient();
+    const supabase = await createServiceClient();
 
     const { data, error } = await supabase.from("webhook_event").insert({
         eventName,
@@ -37,7 +37,7 @@ export async function storeWebhookEvent(
 export async function processWebhookEvent(webhookEvent: Tables<"webhook_event">) {
     configureLemonSqueezy();
 
-    const supabase = await createClient();
+    const supabase = await createServiceClient();
 
     const { data: dbWebhookEvent, error } = await supabase.from("webhook_event").select("*").eq("id", webhookEvent.id).single();
 

@@ -3,13 +3,13 @@
 import { getProduct, listPrices, listProducts, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables } from "@/types/supabase";
-import { createClient } from "@/utils/supabase/server";
+import { createSSRClient } from "@/utils/supabase/server";
 
 // Syncs all the plans from Lemon Squeezy to the database.
 export async function syncPlans() {
     configureLemonSqueezy();
 
-    const supabase = await createClient();
+    const supabase = await createSSRClient();
 
     let plans: Tables<'plans'>[] = [];
     const { data: dbPlans, error } = await supabase.from("plans").select("*");

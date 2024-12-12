@@ -1,10 +1,10 @@
-import { createClient } from "@/utils/supabase/server"
+import { createSSRClient } from "@/utils/supabase/server"
 import { syncPlans } from "../actions";
 import { Plan } from "./plan";
 
 export async function Plans() {
 
-    const supabase = await createClient();
+    const supabase = await createSSRClient();
     let { data: allPlans, error } = await supabase.from("plans").select("*");
     if (error) {
         console.error("Error fetching plans:", error);
