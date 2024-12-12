@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server"
-import { syncPlans } from "../../actions";
+import { syncPlans } from "../actions";
 import { Plan } from "./plan";
 
 export async function Plans() {

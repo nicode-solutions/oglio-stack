@@ -14,46 +14,46 @@ export type Database = {
           description: string | null
           id: string
           interval: string | null
-          interval_count: number | null
-          is_usage_based: boolean | null
+          intervalCount: number | null
+          isUsageBased: boolean | null
           name: string
           price: number
-          product_id: number
-          product_name: string
+          productId: number
+          productName: string
           sort: number | null
-          trial_interval: string | null
-          trial_interval_count: number | null
-          variant_id: number
+          trialInterval: string | null
+          trialIntervalCount: number | null
+          variantId: number
         }
         Insert: {
           description?: string | null
           id?: string
           interval?: string | null
-          interval_count?: number | null
-          is_usage_based?: boolean | null
+          intervalCount?: number | null
+          isUsageBased?: boolean | null
           name: string
           price: number
-          product_id: number
-          product_name: string
+          productId: number
+          productName: string
           sort?: number | null
-          trial_interval?: string | null
-          trial_interval_count?: number | null
-          variant_id: number
+          trialInterval?: string | null
+          trialIntervalCount?: number | null
+          variantId: number
         }
         Update: {
           description?: string | null
           id?: string
           interval?: string | null
-          interval_count?: number | null
-          is_usage_based?: boolean | null
+          intervalCount?: number | null
+          isUsageBased?: boolean | null
           name?: string
           price?: number
-          product_id?: number
-          product_name?: string
+          productId?: number
+          productName?: string
           sort?: number | null
-          trial_interval?: string | null
-          trial_interval_count?: number | null
-          variant_id?: number
+          trialInterval?: string | null
+          trialIntervalCount?: number | null
+          variantId?: number
         }
         Relationships: []
       }
@@ -72,6 +72,98 @@ export type Database = {
           avatar?: string | null
           email?: string | null
           id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          email: string
+          endsAt: string | null
+          id: number
+          isPaused: boolean | null
+          isUsageBased: boolean | null
+          lemonsqueezyId: string
+          name: string
+          orderId: number
+          planId: string
+          price: number
+          renewsAt: string | null
+          status: string
+          statusFormatted: string
+          subscriptionItemId: number | null
+          trialEndsAt: string | null
+          userId: string
+        }
+        Insert: {
+          email: string
+          endsAt?: string | null
+          id?: never
+          isPaused?: boolean | null
+          isUsageBased?: boolean | null
+          lemonsqueezyId: string
+          name: string
+          orderId: number
+          planId: string
+          price: number
+          renewsAt?: string | null
+          status: string
+          statusFormatted: string
+          subscriptionItemId?: number | null
+          trialEndsAt?: string | null
+          userId: string
+        }
+        Update: {
+          email?: string
+          endsAt?: string | null
+          id?: never
+          isPaused?: boolean | null
+          isUsageBased?: boolean | null
+          lemonsqueezyId?: string
+          name?: string
+          orderId?: number
+          planId?: string
+          price?: number
+          renewsAt?: string | null
+          status?: string
+          statusFormatted?: string
+          subscriptionItemId?: number | null
+          trialEndsAt?: string | null
+          userId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_planid_fkey"
+            columns: ["planId"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhook_event: {
+        Row: {
+          body: Json
+          createdAt: string
+          eventName: string
+          id: number
+          processed: boolean | null
+          processingError: string | null
+        }
+        Insert: {
+          body: Json
+          createdAt?: string
+          eventName: string
+          id?: never
+          processed?: boolean | null
+          processingError?: string | null
+        }
+        Update: {
+          body?: Json
+          createdAt?: string
+          eventName?: string
+          id?: never
+          processed?: boolean | null
+          processingError?: string | null
         }
         Relationships: []
       }

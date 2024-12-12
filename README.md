@@ -31,6 +31,7 @@ somehow this token should be used to authenticate the user when the user is redi
 - https://supabase.com/docs/guides/auth/server-side/nextjs
 
 #### Lemonsqueezy integration
+ssh -R 80:localhost:3000 nokey@localhost.run
 
 #### Error handling
 

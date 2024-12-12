@@ -10,6 +10,7 @@ import {
     type ComponentProps,
     type ElementRef,
 } from "react";
+import { getCheckoutURL } from "../actions";
 
 type ButtonElement = ElementRef<typeof Button>;
 type ButtonProps = ComponentProps<typeof Button> & {
@@ -54,7 +55,24 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
                 before={before}
                 disabled={(loading || isCurrent) ?? props.disabled}
                 onClick={async () => {
-                    console.log(JSON.stringify(plan));
+                    // Otherwise, create a checkout and open the Lemon.js modal.
+                    let checkoutUrl: string | undefined = "";
+                    try {
+                        setLoading(true);
+                        checkoutUrl = await getCheckoutURL(plan.variantId, embed);
+                    } catch (error) {
+                        setLoading(false);
+                        console.log("Error creating a checkout.", {
+                            description:
+                                "Please check the server console for more information.",
+                        });
+                    } finally {
+                        embed && setLoading(false);
+                    }
+
+                    embed
+                        ? checkoutUrl && window.LemonSqueezy.Url.Open(checkoutUrl)
+                        : router.push(checkoutUrl ?? "/");
                 }}
                 {...otherProps}
             >

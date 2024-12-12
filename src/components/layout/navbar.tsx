@@ -20,7 +20,7 @@ const Navbar = ({ user }: NavbarProps) => {
                 <div>
                     {user ? (
                         <div className="flex gap-8 items-center">
-                            <Link href="/billing" className="uppercase font-bold underline hover:no-underline">
+                            <Link href="/dashboard/billing" className="uppercase font-bold underline hover:no-underline">
                                 Billing
                             </Link>
                             <UserMenu user={user} />
