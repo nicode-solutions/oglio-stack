@@ -1,6 +1,6 @@
 import { createSSRClient } from "@/utils/supabase/server"
-import { getUserSubscriptions, syncPlans } from "../actions";
-import { Plan } from "./plan";
+import { getUserSubscriptions, syncPlans } from "../../actions";
+import { NoPlans, Plan } from "./plan";
 import { Subscription } from "@lemonsqueezy/lemonsqueezy.js";
 import { Tables } from "@/types/supabase";
 
@@ -41,14 +41,11 @@ export async function Plans({
     }
 
     if (!allPlans?.length) {
-        return <p>No plans available.</p>
+        return <NoPlans />;
     }
 
     return (
         <div>
-            <h2 className="text-3xl font-bold mb-8">Billing 💸</h2>
-
-
             <div className="mb-5 mt-3 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-5">
                 {allPlans.map((plan, index) => {
                     return <Plan key={`plan-${index}`} plan={plan} />

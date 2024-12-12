@@ -33,6 +33,8 @@ somehow this token should be used to authenticate the user when the user is redi
 #### Lemonsqueezy integration
 ssh -R 80:localhost:3000 nokey@localhost.run
 
+check the revalidatePath('/') thing
+
 #### Error handling
 
 #### TanStack Query

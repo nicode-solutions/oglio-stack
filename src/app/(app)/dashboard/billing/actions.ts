@@ -1,6 +1,6 @@
 "use server";
 
-import { createCheckout, getProduct, listPrices, listProducts, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
+import { cancelSubscription, createCheckout, getProduct, getSubscription, listPrices, listProducts, updateSubscription, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables } from "@/types/supabase";
 import { createSSRClient } from "@/utils/supabase/server";
@@ -179,4 +179,139 @@ export async function getUserSubscriptions() {
     }
 
     return userSubscriptions;
+}
+
+/**
+ * This action will get the subscription URLs (update_payment_method and
+ * customer_portal) for the given subscription ID.
+ *
+ */
+export async function getSubscriptionURLs(id: string) {
+    configureLemonSqueezy();
+    const subscription = await getSubscription(id);
+
+    if (subscription.error) {
+        throw new Error(subscription.error.message);
+    }
+
+    return subscription.data.data.attributes.urls;
+}
+
+/**
+ * This action will cancel a subscription on Lemon Squeezy.
+ */
+export async function cancelSub(id: string) {
+    configureLemonSqueezy();
+
+    const supabase = await createSSRClient();
+
+    // Get user subscriptions
+    const userSubscriptions = await getUserSubscriptions();
+
+    // Check if the subscription exists
+    const subscription = userSubscriptions.find(
+        (sub) => sub.lemonsqueezyId === id,
+    );
+
+    if (!subscription) {
+        throw new Error(`Subscription #${id} not found.`);
+    }
+
+    const cancelledSub = await cancelSubscription(id);
+
+    if (cancelledSub.error) {
+        throw new Error(cancelledSub.error.message);
+    }
+
+    // Update the db
+    const { error } = await supabase.from("subscriptions").update({
+        status: cancelledSub.data.data.attributes.status,
+        statusFormatted: cancelledSub.data.data.attributes.status_formatted,
+        endsAt: cancelledSub.data.data.attributes.ends_at,
+    }).eq("lemonSqueezyId", id);
+
+    if (error) {
+        throw new Error(`Failed to cancel Subscription #${id} in the database.`);
+    }
+
+    return cancelledSub;
+}
+
+/**
+ * This action will pause a subscription on Lemon Squeezy.
+ */
+export async function pauseUserSubscription(id: string) {
+    configureLemonSqueezy();
+
+    const supabase = await createSSRClient();
+
+    // Get user subscriptions
+    const userSubscriptions = await getUserSubscriptions();
+
+    // Check if the subscription exists
+    const subscription = userSubscriptions.find(
+        (sub) => sub.lemonsqueezyId === id,
+    );
+
+    if (!subscription) {
+        throw new Error(`Subscription #${id} not found.`);
+    }
+
+    const returnedSub = await updateSubscription(id, {
+        pause: {
+            mode: "void",
+        },
+    });
+
+    // Update the db
+
+    const { error } = await supabase.from("subscriptions").update({
+        status: returnedSub.data?.data.attributes.status,
+        statusFormatted: returnedSub.data?.data.attributes.status_formatted,
+        endsAt: returnedSub.data?.data.attributes.ends_at,
+        isPaused: returnedSub.data?.data.attributes.pause !== null,
+    }).eq("lemonSqueezyId", id);
+
+    if (error) {
+        throw new Error(`Failed to pause Subscription #${id} in the database.`);
+    }
+
+    return returnedSub;
+}
+
+/**
+ * This action will unpause a subscription on Lemon Squeezy.
+ */
+export async function unpauseUserSubscription(id: string) {
+    configureLemonSqueezy();
+
+    const supabase = await createSSRClient();
+
+    // Get user subscriptions
+    const userSubscriptions = await getUserSubscriptions();
+
+    // Check if the subscription exists
+    const subscription = userSubscriptions.find(
+        (sub) => sub.lemonsqueezyId === id,
+    );
+
+    if (!subscription) {
+        throw new Error(`Subscription #${id} not found.`);
+    }
+
+    const returnedSub = await updateSubscription(id, { pause: null });
+
+    // Update the db
+    const { error } = await supabase.from("subscriptions").update({
+        status: returnedSub.data?.data.attributes.status,
+        statusFormatted: returnedSub.data?.data.attributes.status_formatted,
+        endsAt: returnedSub.data?.data.attributes.ends_at,
+        isPaused: returnedSub.data?.data.attributes.pause !== null,
+    }).eq("lemonSqueezyId", id);
+
+    if (error) {
+        throw new Error(`Failed to pause Subscription #${id} in the database.`);
+    }
+
+    return returnedSub;
 }

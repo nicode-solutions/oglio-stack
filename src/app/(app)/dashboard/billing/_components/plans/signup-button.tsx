@@ -10,7 +10,7 @@ import {
     type ComponentProps,
     type ElementRef,
 } from "react";
-import { getCheckoutURL } from "../actions";
+import { getCheckoutURL } from "../../actions";
 
 type ButtonElement = ElementRef<typeof Button>;
 type ButtonProps = ComponentProps<typeof Button> & {
