@@ -2,10 +2,43 @@
 
 import { getProduct, listPrices, listProducts, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
+import { TablesInsert, Tables } from "@/types/supabase";
+import { createClient } from "@/utils/supabase/server";
 
 // Syncs all the plans from Lemon Squeezy to the database.
 export async function syncPlans() {
     configureLemonSqueezy();
+
+    const supabase = await createClient();
+
+    let plans: Tables<'plans'>[] = [];
+    const { data: dbPlans, error } = await supabase.from("plans").select("*");
+    if (dbPlans) plans = dbPlans;
+
+    // Helper function to add a variant to the plans array and sync it with the database.
+    async function _addPlan(plan: TablesInsert<"plans">) {
+        // Upsert the plan using variant_id as the unique key
+        const { error, data: newPlan } = await supabase
+            .from("plans")
+            .upsert(plan, {
+                onConflict: 'variant_id',
+                ignoreDuplicates: false
+            })
+            .select("*")
+            .single();
+
+        if (error) {
+            console.error(`Failed to upsert plan for variant ${plan.variant_id}:`, error);
+            throw new Error(`Failed to sync plan: ${error.message}`);
+        }
+
+        if (newPlan) plans.push(newPlan);
+    }
+
+    if (error) {
+        console.error("Failed to fetch plans:", error);
+        throw new Error(`Failed to fetch plans: ${error.message}`);
+    }
 
     // Fetch products from the Lemon Squeezy store.
     const products = await listProducts({
@@ -42,8 +75,7 @@ export async function syncPlans() {
             });
 
             const currentPriceObj = variantPriceObject.data?.data.at(0);
-            const isUsageBased =
-                currentPriceObj?.attributes.usage_aggregation !== null;
+
             const interval = currentPriceObj?.attributes.renewal_interval_unit;
             const intervalCount =
                 currentPriceObj?.attributes.renewal_interval_quantity;
@@ -51,34 +83,34 @@ export async function syncPlans() {
             const trialIntervalCount =
                 currentPriceObj?.attributes.trial_interval_quantity;
 
-            const price = isUsageBased
-                ? currentPriceObj?.attributes.unit_price_decimal
-                : currentPriceObj.attributes.unit_price;
+            const price = currentPriceObj?.attributes.unit_price;
 
             const isSubscription =
                 currentPriceObj?.attributes.category === "subscription";
 
             // If not a subscription, skip it.
-            if (!isSubscription) {
+            if (!isSubscription || !price) {
                 continue;
             }
 
-            console.log({
-                id: v.id,
+            const plan: TablesInsert<"plans"> = {
                 name: variant.name,
                 description: variant.description,
                 price,
                 interval: interval ?? null,
                 interval_count: intervalCount ?? null,
-                is_usage_based: isUsageBased,
+                is_usage_based: false,
                 product_id: variant.product_id,
+                variant_id: parseInt(v.id),
                 product_name: productName,
                 trial_interval: trialInterval ?? null,
                 trial_interval_count: trialIntervalCount ?? null,
                 sort: variant.sort,
-            });
+            }
+
+            await _addPlan(plan);
         }
     }
 
-    return { products: products };
+    return plans;
 }

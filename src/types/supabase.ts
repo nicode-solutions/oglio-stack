@@ -9,34 +9,53 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      petroglyphs: {
+      plans: {
         Row: {
-          created_at: string
-          engraved_by: string
-          engraving: string
+          description: string | null
           id: string
+          interval: string | null
+          interval_count: number | null
+          is_usage_based: boolean | null
+          name: string
+          price: number
+          product_id: number
+          product_name: string
+          sort: number | null
+          trial_interval: string | null
+          trial_interval_count: number | null
+          variant_id: number
         }
         Insert: {
-          created_at?: string
-          engraved_by?: string
-          engraving?: string
+          description?: string | null
           id?: string
+          interval?: string | null
+          interval_count?: number | null
+          is_usage_based?: boolean | null
+          name: string
+          price: number
+          product_id: number
+          product_name: string
+          sort?: number | null
+          trial_interval?: string | null
+          trial_interval_count?: number | null
+          variant_id: number
         }
         Update: {
-          created_at?: string
-          engraved_by?: string
-          engraving?: string
+          description?: string | null
           id?: string
+          interval?: string | null
+          interval_count?: number | null
+          is_usage_based?: boolean | null
+          name?: string
+          price?: number
+          product_id?: number
+          product_name?: string
+          sort?: number | null
+          trial_interval?: string | null
+          trial_interval_count?: number | null
+          variant_id?: number
         }
-        Relationships: [
-          {
-            foreignKeyName: "petroglyphs_engraved_by_fkey"
-            columns: ["engraved_by"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {

@@ -20,7 +20,7 @@ pnpx supabase gen types typescript --project-id "$PROJECT_REF" --schema public >
 
 ### Notes
 
-#### Supabase Auth Refactor
+#### Supabase Auth: 
 after signup user gets the following email text:
 ```
 Confirm your signup
@@ -29,3 +29,9 @@ https://pdqnmyvrdycjiycjzacl.supabase.co/auth/v1/verify?token=pkce_ac785949af31f
 ```
 somehow this token should be used to authenticate the user when the user is redirected to the app:
 - https://supabase.com/docs/guides/auth/server-side/nextjs
+
+#### Lemonsqueezy integration
+
+#### Error handling
+
+#### TanStack Query
