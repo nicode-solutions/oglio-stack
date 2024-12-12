@@ -4,6 +4,7 @@ import { createCheckout, getProduct, listPrices, listProducts, type Variant } fr
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables } from "@/types/supabase";
 import { createSSRClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 // Syncs all the plans from Lemon Squeezy to the database.
 export async function syncPlans() {
@@ -12,7 +13,7 @@ export async function syncPlans() {
     const supabase = await createSSRClient();
 
     let plans: Tables<'plans'>[] = [];
-    const { data: dbPlans, error } = await supabase.from("plans").select("*");
+    const { data: dbPlans, error } = await supabase.from("plans").select();
     if (dbPlans) plans = dbPlans;
 
     // Helper function to add a variant to the plans array and sync it with the database.
@@ -24,7 +25,7 @@ export async function syncPlans() {
                 onConflict: 'variantId',
                 ignoreDuplicates: false
             })
-            .select("*")
+            .select()
             .single();
 
         if (error) {
@@ -155,3 +156,27 @@ export async function getCheckoutURL(variantId: number, embed = false) {
     return checkout.data?.data.attributes.url;
 }
 
+/**
+ * This action will get the subscriptions for the current user.
+ */
+export async function getUserSubscriptions() {
+    const supabase = await createSSRClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        throw new Error("User is not authenticated.");
+    }
+
+    const { data: userSubscriptions, error } = await supabase
+        .from("subscriptions")
+        .select()
+        .eq("userId", user.id);
+
+    if (error) {
+        console.error("Error fetching user subscriptions:", error);
+        return [];
+    }
+
+    return userSubscriptions;
+}

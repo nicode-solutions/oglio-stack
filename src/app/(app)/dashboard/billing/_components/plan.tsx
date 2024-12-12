@@ -1,9 +1,16 @@
-import { formatPrice } from "@/lib/utils"
+import { cn, formatPrice } from "@/lib/utils"
 import { Tables } from "@/types/supabase"
 import { SignupButton } from "./signup-button"
 
-export function Plan({ plan }: { plan: Tables<"plans"> }) {
-    const { description, product_name: productName, name, price } = plan
+interface PlanProps {
+    plan: Tables<"plans">
+    currentPlan?: Tables<"plans"> | null
+    isChangingPlans?: boolean
+}
+
+export function Plan({ plan, currentPlan, isChangingPlans }: PlanProps) {
+    const { description, id, productName, interval, name, price } = plan;
+    const isCurrent = id && currentPlan?.id === id;
 
     return (
         <div>
@@ -20,7 +27,13 @@ export function Plan({ plan }: { plan: Tables<"plans"> }) {
                 ></div>
             ) : null}
 
-            <p>{formatPrice(price)}</p>
+            <div className={cn(isCurrent && "opacity-60")}>
+                <span className="mr-0.5 text-xl text-surface-900">
+                    {formatPrice(price)}
+                </span>
+                {!plan.isUsageBased && interval ? ` per ${interval}` : null}
+                {plan.isUsageBased && interval ? ` /unit per ${interval}` : null}
+            </div>
 
             <SignupButton
                 className="w-full"

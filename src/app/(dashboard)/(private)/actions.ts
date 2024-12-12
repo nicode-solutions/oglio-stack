@@ -12,7 +12,7 @@ export async function syncPlans() {
     const supabase = await createSSRClient();
 
     let plans: Tables<'plans'>[] = [];
-    const { data: dbPlans, error } = await supabase.from("plans").select("*");
+    const { data: dbPlans, error } = await supabase.from("plans").select();
     if (dbPlans) plans = dbPlans;
 
     // Helper function to add a variant to the plans array and sync it with the database.
@@ -24,7 +24,7 @@ export async function syncPlans() {
                 onConflict: 'variantId',
                 ignoreDuplicates: false
             })
-            .select("*")
+            .select()
             .single();
 
         if (error) {

@@ -20,7 +20,7 @@ export async function storeWebhookEvent(
     const { data, error } = await supabase.from("webhook_event").insert({
         eventName,
         body,
-    }).select("*").single();
+    }).select().single();
 
     if (error) {
         console.error("Failed to store webhook event:", error);
@@ -39,7 +39,7 @@ export async function processWebhookEvent(webhookEvent: Tables<"webhook_event">)
 
     const supabase = await createServiceClient();
 
-    const { data: dbWebhookEvent, error } = await supabase.from("webhook_event").select("*").eq("id", webhookEvent.id).single();
+    const { data: dbWebhookEvent, error } = await supabase.from("webhook_event").select().eq("id", webhookEvent.id).single();
 
     if (error || !dbWebhookEvent) {
         console.error(`Webhook event #${webhookEvent.id} not found in the database.`, error);
@@ -69,7 +69,7 @@ export async function processWebhookEvent(webhookEvent: Tables<"webhook_event">)
             const variantId = attributes.variant_id as string;
 
             // We assume that the Plan table is up to date.
-            const { data: plan, error } = await supabase.from("plans").select("*").eq("variantId", variantId).single();
+            const { data: plan, error } = await supabase.from("plans").select().eq("variantId", variantId).single();
 
             if (error || !plan) {
                 processingError = `Plan with variantId ${variantId} not found.`;
