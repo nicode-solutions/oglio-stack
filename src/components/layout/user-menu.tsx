@@ -35,6 +35,7 @@ const UserMenu = ({ user }: UserMenuProps) => {
             <DropdownMenuContent>
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push('/dashboard/billing')}>Billing</DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
