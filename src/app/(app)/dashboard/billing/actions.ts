@@ -263,13 +263,12 @@ export async function pauseUserSubscription(id: string) {
     });
 
     // Update the db
-
     const { error } = await supabase.from("subscriptions").update({
         status: returnedSub.data?.data.attributes.status,
         statusFormatted: returnedSub.data?.data.attributes.status_formatted,
         endsAt: returnedSub.data?.data.attributes.ends_at,
         isPaused: returnedSub.data?.data.attributes.pause !== null,
-    }).eq("lemonSqueezyId", id);
+    }).eq("lemonsqueezyId", id);
 
     if (error) {
         throw new Error(`Failed to pause Subscription #${id} in the database.`);
@@ -306,7 +305,7 @@ export async function unpauseUserSubscription(id: string) {
         statusFormatted: returnedSub.data?.data.attributes.status_formatted,
         endsAt: returnedSub.data?.data.attributes.ends_at,
         isPaused: returnedSub.data?.data.attributes.pause !== null,
-    }).eq("lemonSqueezyId", id);
+    }).eq("lemonsqueezyId", id);
 
     if (error) {
         throw new Error(`Failed to pause Subscription #${id} in the database.`);
