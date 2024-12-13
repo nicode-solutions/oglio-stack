@@ -14,7 +14,7 @@ import { SubscriptionActions } from "./actions";
 export async function Subscriptions() {
     const userSubscriptions = await getUserSubscriptions();
     const supabase = await createSSRClient();
-    let { data: allPlans, error } = await supabase.from("plans").select();
+    const { data: allPlans, error } = await supabase.from("plans").select();
     if (error) {
         console.error("Error fetching plans:", error);
         return <p>Error fetching plans.</p>;

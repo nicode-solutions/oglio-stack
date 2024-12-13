@@ -1,19 +1,27 @@
 import { Suspense } from "react";
-import { Plans } from "./_components/plans/plans";
 import { Subscriptions } from "./_components/subscriptions/subscriptions";
 import { CardSkeleton } from "./_components/skeletons/card";
+import { DashboardContent } from "../_components/content";
+import { PageTitleAction } from "../_components/page-title-action";
 import { PlansSkeleton } from "./_components/skeletons/plans";
+import { Plans } from "./_components/plans/plans";
 
 export default function BillingPage() {
     return (
-        <div className="bg-primary bg-opacity-20 min-h-screen p-8">
-            <Suspense fallback={<CardSkeleton className="h-[106px]" />}>
-                <Subscriptions />
-            </Suspense>
+        <DashboardContent
+            title="Billing"
+            subtitle="View and manage your billing information."
+            action={<PageTitleAction />}
+        >
+            <div>
+                <Suspense fallback={<CardSkeleton className="h-[106px]" />}>
+                    <Subscriptions />
+                </Suspense>
 
-            <Suspense fallback={<PlansSkeleton />}>
-                <Plans />
-            </Suspense>
-        </div>
+                <Suspense fallback={<PlansSkeleton />}>
+                    <Plans />
+                </Suspense>
+            </div>
+        </DashboardContent>
     )
 }

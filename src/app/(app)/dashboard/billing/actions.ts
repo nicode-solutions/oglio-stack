@@ -1,6 +1,4 @@
-"use server";
-
-import { revalidatePath } from "next/cache";
+'use server';
 
 import { cancelSubscription, createCheckout, getProduct, getSubscription, listPrices, listProducts, updateSubscription, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
@@ -114,8 +112,6 @@ export async function syncPlans() {
         }
     }
 
-    revalidatePath("/");
-
     return plans;
 }
 
@@ -181,8 +177,6 @@ export async function getUserSubscriptions() {
         return [];
     }
 
-    revalidatePath("/");
-
     return userSubscriptions;
 }
 
@@ -198,8 +192,6 @@ export async function getSubscriptionURLs(id: string) {
     if (subscription.error) {
         throw new Error(subscription.error.message);
     }
-
-    revalidatePath("/");
 
     return subscription.data.data.attributes.urls;
 }
@@ -240,8 +232,6 @@ export async function cancelSub(id: string) {
     if (error) {
         throw new Error(`Failed to cancel Subscription #${id} in the database.`);
     }
-
-    revalidatePath("/");
 
     return cancelledSub;
 }
@@ -285,8 +275,6 @@ export async function pauseUserSubscription(id: string) {
         throw new Error(`Failed to pause Subscription #${id} in the database.`);
     }
 
-    revalidatePath("/");
-
     return returnedSub;
 }
 
@@ -323,8 +311,6 @@ export async function unpauseUserSubscription(id: string) {
     if (error) {
         throw new Error(`Failed to pause Subscription #${id} in the database.`);
     }
-
-    revalidatePath("/");
 
     return returnedSub;
 }

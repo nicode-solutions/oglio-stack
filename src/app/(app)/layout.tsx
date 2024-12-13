@@ -3,7 +3,6 @@ import Footer from "@/components/layout/footer";
 import { createSSRClient } from "@/utils/supabase/server";
 import Script from "next/script";
 
-
 export default async function DashboardLayout({
   children,
 }: Readonly<{

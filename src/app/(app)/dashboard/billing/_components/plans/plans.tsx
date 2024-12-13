@@ -12,13 +12,14 @@ export async function Plans({
 }) {
 
     const supabase = await createSSRClient();
+    const userSubscriptions = await getUserSubscriptions();
+    // eslint-disable-next-line prefer-const
     let { data: allPlans, error } = await supabase.from("plans").select();
     if (error) {
         console.error("Error fetching plans:", error);
         return <p>Error fetching plans.</p>;
     }
 
-    const userSubscriptions = await getUserSubscriptions();
 
     if (userSubscriptions && userSubscriptions.length > 0) {
         const hasValidSubscription = userSubscriptions.some((sub) => {

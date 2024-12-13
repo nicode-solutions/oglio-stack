@@ -1,4 +1,4 @@
-"use server";
+'use server';
 
 import { createSSRClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
