@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 import { Tables } from "@/types/supabase"
 import { SignupButton } from "./signup-button"
 import { Section } from "../section"

@@ -1,25 +1,30 @@
-import { createSSRClient } from "@/utils/supabase/server"
-import { getUserSubscriptions, syncPlans } from "../../actions";
-import { NoPlans, Plan } from "./plan";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
 import { Subscription } from "@lemonsqueezy/lemonsqueezy.js";
+
+import { getPlans, getUserSubscriptions } from "@/server/billing/actions";
+import { NoPlans, Plan } from "./plan";
 import { Tables } from "@/types/supabase";
 
-export async function Plans({
+export function Plans({
     isChangingPlans = false,
 }: {
     isChangingPlans?: boolean;
     currentPlan?: Tables<"plans"> | null;
 }) {
 
-    const supabase = await createSSRClient();
-    const userSubscriptions = await getUserSubscriptions();
-    // eslint-disable-next-line prefer-const
-    let { data: allPlans, error } = await supabase.from("plans").select();
-    if (error) {
-        console.error("Error fetching plans:", error);
-        return <p>Error fetching plans.</p>;
-    }
+    const { data: userSubscriptions } = useQuery({
+        queryKey: ["subscriptions"],
+        queryFn: getUserSubscriptions,
+        initialData: [],
+    });
 
+    const { data: allPlans } = useQuery({
+        queryKey: ["plans"],
+        queryFn: getPlans,
+        initialData: [],
+    });
 
     if (userSubscriptions && userSubscriptions.length > 0) {
         const hasValidSubscription = userSubscriptions.some((sub) => {
@@ -35,11 +40,12 @@ export async function Plans({
         }
     }
 
+    // @TODO: FIX THIS OR MOVE SOMEWHERE ELSE
     // If there are no plans in the database, sync them from Lemon Squeezy.
     // You might want to add logic to sync plans periodically or a webhook handler.
-    if (!allPlans?.length) {
-        allPlans = await syncPlans();
-    }
+    // if (!allPlans?.length) {
+    //     allPlans = await syncPlans();
+    // }
 
     if (!allPlans?.length) {
         return <NoPlans />;

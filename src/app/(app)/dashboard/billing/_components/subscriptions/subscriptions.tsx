@@ -1,24 +1,33 @@
-import { createSSRClient } from "@/utils/supabase/server";
-import { getUserSubscriptions } from "../../actions";
+"use client";
+
+import { getPlans, getUserSubscriptions } from "@/server/billing/actions";
 import { Tables } from "@/types/supabase";
 import { SubscriptionStatusType } from "@/types/types";
 import { Section } from "../section";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { isValidSubscription } from "@/utils/lemonsqueezy/helpers";
 import { ChangePlan } from "../plans/change-plan-button";
 import { SubscriptionPrice } from "./price";
 import { SubscriptionStatus } from "./status";
 import { SubscriptionDate } from "./date";
 import { SubscriptionActions } from "./actions";
+import { useQuery } from "@tanstack/react-query";
 
-export async function Subscriptions() {
-    const userSubscriptions = await getUserSubscriptions();
-    const supabase = await createSSRClient();
-    const { data: allPlans, error } = await supabase.from("plans").select();
-    if (error) {
-        console.error("Error fetching plans:", error);
-        return <p>Error fetching plans.</p>;
-    }
+
+export function Subscriptions({ subscriptions, plans }: { subscriptions: Tables<"subscriptions">[], plans: Tables<"plans">[] }) {
+
+    const { data: userSubscriptions } = useQuery({
+        queryKey: ["subscriptions"],
+        queryFn: getUserSubscriptions,
+        initialData: subscriptions
+    });
+
+
+    const { data: allPlans, isFetched: plansFetched } = useQuery({
+        queryKey: ["plans"],
+        queryFn: getPlans,
+        initialData: plans
+    });
 
     if (userSubscriptions.length === 0) {
         return (
@@ -41,6 +50,14 @@ export async function Subscriptions() {
 
         return 0;
     });
+
+    if (!plansFetched) {
+        return (
+            <div>
+                Loading...
+            </div>
+        )
+    }
 
     return (
         <Section className="not-prose relative">
@@ -74,7 +91,6 @@ export async function Subscriptions() {
                                     {isValidSubscription(status) && (
                                         <ChangePlan planId={subscription.planId} />
                                     )}
-
                                     <SubscriptionActions subscription={subscription} />
                                 </div>
                             </header>

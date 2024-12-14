@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FormButton } from "@/components/ui/form-button";
 import { Logo } from "@/components/icons/logo";
-import { loginAction } from "../actions";
+import { loginAction } from "@/server/auth/actions";
 
 export default async function Login() {
     return (

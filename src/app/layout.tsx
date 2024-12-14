@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import TanstackProvider from "@/utils/tanstack/tanstack-provider";
 import "./globals.css";
+
 
 const defaultFont = Nunito({ subsets: ["latin"] });
 
@@ -19,7 +21,7 @@ export default function RootLayout({
             <body
                 className={defaultFont.className}
             >
-                {children}
+                <TanstackProvider>{children}</TanstackProvider>
             </body>
         </html>
     );

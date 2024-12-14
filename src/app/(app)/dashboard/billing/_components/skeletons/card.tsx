@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Section } from "../section";
 
 export function CardSkeleton({ className }: { className?: string }) {

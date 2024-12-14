@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { Tables } from "@/types/supabase";
 import { Button, DropdownMenu, Loading } from "@lemonsqueezy/wedges";
-import { cancelSub, getSubscriptionURLs, pauseUserSubscription, unpauseUserSubscription } from "../../actions";
+import { cancelSub, getSubscriptionURLs, pauseUserSubscription, unpauseUserSubscription } from "@/server/billing/actions";
 import { LemonSqueezyModalLink } from "./modal-link";
 
 

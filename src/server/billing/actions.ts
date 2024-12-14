@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import { cancelSubscription, createCheckout, getProduct, getSubscription, listPrices, listProducts, updateSubscription, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
@@ -110,6 +110,20 @@ export async function syncPlans() {
 
             await _addPlan(plan);
         }
+    }
+
+    return plans;
+}
+
+// Get plans from the database.
+export async function getPlans() {
+    const supabase = await createSSRClient();
+
+    const { data: plans, error } = await supabase.from("plans").select();
+
+    if (error) {
+        console.error("Failed to fetch plans:", error);
+        throw new Error(`Failed to fetch plans: ${error.message}`);
     }
 
     return plans;

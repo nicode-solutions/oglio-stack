@@ -15,7 +15,7 @@ export default function BillingPage() {
         >
             <div>
                 <Suspense fallback={<CardSkeleton className="h-[106px]" />}>
-                    <Subscriptions />
+                    <Subscriptions subscriptions={[]} plans={[]} />
                 </Suspense>
 
                 <Suspense fallback={<PlansSkeleton />}>

@@ -3,7 +3,7 @@ import { getPrice } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables, Json } from "@/types/supabase";
 import { createServiceClient } from "@/utils/supabase/server";
-import { webhookHasData, webhookHasMeta } from "@/lib/typeguards";
+import { webhookHasData, webhookHasMeta } from "@/utils/typeguards";
 
 /**
  * This action will store a webhook event in the database.
