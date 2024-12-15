@@ -12,16 +12,33 @@ ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies for profiles
 CREATE POLICY "can only view own profile data"
-ON profiles
+ON public.profiles
 FOR SELECT
 TO public
 USING (auth.uid() = id);
 
 CREATE POLICY "can only update own profile data"
-ON profiles
+ON public.profiles
 FOR UPDATE
 TO public
 USING (auth.uid() = id);
+
+-- Create the function to create a profile when a new user is added
+CREATE OR REPLACE FUNCTION public.create_profile()
+RETURNS trigger 
+AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email)
+  VALUES (NEW.id, NEW.email);
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create the trigger to call the create_profile function after a new user is inserted
+CREATE TRIGGER create_profile_trigger
+AFTER INSERT ON auth.users 
+FOR EACH ROW 
+EXECUTE FUNCTION public.create_profile();
 
 -- Create the plans table
 CREATE TABLE public.plans (
@@ -163,19 +180,3 @@ ON public.webhook_event
 FOR DELETE 
 TO service_role 
 USING (true);
-
--- Create the function to create a profile when a new user is added
-CREATE OR REPLACE FUNCTION public.create_profile() 
-RETURNS trigger AS $$
-BEGIN
-  INSERT INTO public.profiles (id, email)
-  VALUES (NEW.id, NEW.email);
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Create the trigger to call the create_profile function after a new user is inserted
-CREATE TRIGGER create_profile_trigger
-AFTER INSERT ON auth.users 
-FOR EACH ROW 
-EXECUTE FUNCTION public.create_profile();
