@@ -32,7 +32,9 @@ BEGIN
   VALUES (NEW.id, NEW.email);
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql 
+SECURITY DEFINER
+SET search_path = public;
 
 -- Create the trigger to call the create_profile function after a new user is inserted
 CREATE TRIGGER create_profile_trigger
