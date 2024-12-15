@@ -7,6 +7,22 @@ CREATE TABLE public.profiles (
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE
 );
 
+-- Enable RLS on the profiles table
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies for profiles
+CREATE POLICY "can only view own profile data"
+ON profiles
+FOR SELECT
+TO public
+USING (auth.uid() = id);
+
+CREATE POLICY "can only update own profile data"
+ON profiles
+FOR UPDATE
+TO public
+USING (auth.uid() = id);
+
 -- Create the plans table
 CREATE TABLE public.plans (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -71,11 +87,11 @@ FOR SELECT
 TO authenticated 
 USING ("userId" = auth.uid());
 
-CREATE POLICY "Users can insert subscriptions" 
+CREATE POLICY "Allow service role to insert subscriptions" 
 ON public.subscriptions 
 FOR INSERT 
-TO authenticated 
-WITH CHECK ("userId" = auth.uid());
+TO service_role 
+WITH CHECK (true);
 
 CREATE POLICY "Users can update their own subscriptions" 
 ON public.subscriptions 
@@ -89,6 +105,35 @@ ON public.subscriptions
 FOR DELETE 
 TO authenticated 
 USING ("userId" = auth.uid());
+
+-- Enable RLS on the plans table
+ALTER TABLE public.plans ENABLE ROW LEVEL SECURITY;
+
+-- Create RLS policies for plans
+CREATE POLICY "Allow authenticated users to select plans" 
+ON public.plans 
+FOR SELECT 
+TO authenticated 
+USING (true);
+
+CREATE POLICY "Allow service role to insert plans" 
+ON public.plans 
+FOR INSERT 
+TO service_role 
+WITH CHECK (true);
+
+CREATE POLICY "Allow service role to update plans" 
+ON public.plans 
+FOR UPDATE 
+TO service_role 
+USING (true) 
+WITH CHECK (true);
+
+CREATE POLICY "Allow service role to delete plans" 
+ON public.plans 
+FOR DELETE 
+TO service_role 
+USING (true);
 
 -- Enable RLS on the webhook_event table
 ALTER TABLE public.webhook_event ENABLE ROW LEVEL SECURITY;
@@ -120,7 +165,7 @@ TO service_role
 USING (true);
 
 -- Create the function to create a profile when a new user is added
-CREATE OR REPLACE FUNCTION public.create_profile()
+CREATE OR REPLACE FUNCTION public.create_profile() 
 RETURNS trigger AS $$
 BEGIN
   INSERT INTO public.profiles (id, email)
@@ -131,6 +176,6 @@ $$ LANGUAGE plpgsql;
 
 -- Create the trigger to call the create_profile function after a new user is inserted
 CREATE TRIGGER create_profile_trigger
-AFTER INSERT ON auth.users
-FOR EACH ROW
+AFTER INSERT ON auth.users 
+FOR EACH ROW 
 EXECUTE FUNCTION public.create_profile();
