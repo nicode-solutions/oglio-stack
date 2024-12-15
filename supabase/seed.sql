@@ -24,7 +24,7 @@ TO public
 USING (auth.uid() = id);
 
 -- Create the function to create a profile when a new user is added
-CREATE OR REPLACE FUNCTION public.create_profile()
+CREATE OR REPLACE FUNCTION create_profile()
 RETURNS trigger 
 AS $$
 BEGIN
@@ -34,13 +34,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql 
 SECURITY DEFINER
-SET search_path = public;
 
 -- Create the trigger to call the create_profile function after a new user is inserted
 CREATE TRIGGER create_profile_trigger
 AFTER INSERT ON auth.users 
 FOR EACH ROW 
-EXECUTE FUNCTION public.create_profile();
+EXECUTE FUNCTION create_profile();
 
 -- Create the plans table
 CREATE TABLE public.plans (
