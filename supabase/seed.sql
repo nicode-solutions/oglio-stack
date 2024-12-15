@@ -28,12 +28,14 @@ CREATE OR REPLACE FUNCTION create_profile()
 RETURNS trigger 
 AS $$
 BEGIN
+  SET search_path = '';
   INSERT INTO public.profiles (id, email)
   VALUES (NEW.id, NEW.email);
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql 
-SECURITY DEFINER
+SECURITY DEFINER;
+
 
 -- Create the trigger to call the create_profile function after a new user is inserted
 CREATE TRIGGER create_profile_trigger
