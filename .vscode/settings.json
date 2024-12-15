@@ -1,6 +1,6 @@
 {
   "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "deno.enablePaths": [
     "supabase/functions"

@@ -9,6 +9,7 @@ OglioStack is an open source full stack web development boilerplate developed by
 ### Stack
 - [Supabase](https://supabase.io)
 - [Next.js](https://nextjs.org)
+- [TanStack Query](https://tanstack.com/query)
 - [Tailwind CSS](https://tailwindcss.com)
 
 ### Useful commands
@@ -18,7 +19,13 @@ export PROJECT_REF="pdqnmyvrdycjiycjzacl"
 pnpx supabase gen types typescript --project-id "$PROJECT_REF" --schema public > src/types/supabase.ts
 ```
 
-### Notes
+### Tunneling
+```bash
+ssh -R 80:localhost:3000 nokey@localhost.run
+```
+
+
+### Notes for v0.1.0
 
 #### Supabase Auth: 
 after signup user gets the following email text:
@@ -31,8 +38,9 @@ somehow this token should be used to authenticate the user when the user is redi
 - https://supabase.com/docs/guides/auth/server-side/nextjs
 
 #### Lemonsqueezy integration
-ssh -R 80:localhost:3000 nokey@localhost.run
-
-#### Error handling
+- Change plan
 
 #### TanStack Query
+- https://tanstack.com/query/latest/docs/framework/react/guides/ssr
+
+#### Error handling
