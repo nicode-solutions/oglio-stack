@@ -34,7 +34,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql 
 SECURITY DEFINER
-SET search_path TO public, auth;
+SET search_path TO '';
 
 
 -- Create the trigger on auth.users
