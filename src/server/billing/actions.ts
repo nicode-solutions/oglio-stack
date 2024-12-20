@@ -3,13 +3,13 @@
 import { cancelSubscription, createCheckout, getProduct, getSubscription, listPrices, listProducts, updateSubscription, type Variant } from "@lemonsqueezy/lemonsqueezy.js";
 import { configureLemonSqueezy } from "@/utils/lemonsqueezy/lemonsqueezy";
 import { TablesInsert, Tables } from "@/types/supabase";
-import { createSSRClient } from "@/utils/supabase/server";
+import { createSSRClient, createServiceClient } from "@/utils/supabase/server";
 
 // Syncs all the plans from Lemon Squeezy to the database.
 export async function syncPlans() {
     configureLemonSqueezy();
 
-    const supabase = await createSSRClient();
+    const supabase = createServiceClient();
 
     let plans: Tables<'plans'>[] = [];
     const { data: dbPlans, error } = await supabase.from("plans").select();
@@ -119,14 +119,19 @@ export async function syncPlans() {
 export async function getPlans() {
     const supabase = await createSSRClient();
 
-    const { data: plans, error } = await supabase.from("plans").select();
+    const { data, error } = await supabase.from("plans").select();
+
+    if (data?.length === 0) {
+        const plans = await syncPlans();
+        return plans;
+    }
 
     if (error) {
         console.error("Failed to fetch plans:", error);
         throw new Error(`Failed to fetch plans: ${error.message}`);
     }
 
-    return plans;
+    return data;
 }
 
 /**

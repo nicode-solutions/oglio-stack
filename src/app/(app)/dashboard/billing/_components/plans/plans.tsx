@@ -40,13 +40,6 @@ export function Plans({
         }
     }
 
-    // @TODO: FIX THIS OR MOVE SOMEWHERE ELSE
-    // If there are no plans in the database, sync them from Lemon Squeezy.
-    // You might want to add logic to sync plans periodically or a webhook handler.
-    // if (!allPlans?.length) {
-    //     allPlans = await syncPlans();
-    // }
-
     if (!allPlans?.length) {
         return <NoPlans />;
     }
