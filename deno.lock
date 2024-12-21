@@ -1,6 +1,7 @@
 {
   "version": "4",
   "remote": {
+    "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.6.1": "84f7766fdedd1c7423429ccf955080ea7c9d17507782a59c6bc3c9acc49b7e2c",
     "https://deno.land/std@0.150.0/media_types/_util.ts": "ce9b4fc4ba1c447dafab619055e20fd88236ca6bdd7834a21f98bd193c3fbfa1",
     "https://deno.land/std@0.150.0/media_types/mod.ts": "2d4b6f32a087029272dc59e0a55ae3cc4d1b27b794ccf528e94b1925795b3118",
     "https://deno.land/std@0.150.0/media_types/vendor/mime-db.v1.52.0.ts": "724cee25fa40f1a52d3937d6b4fbbfdd7791ff55e1b7ac08d9319d5632c7f5af",
