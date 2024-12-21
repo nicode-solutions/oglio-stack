@@ -1,10 +1,11 @@
 {
   "[typescript]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[sql]": {
     "editor.formatOnSave": false
   },
+  "deno.enable": true,
   "deno.enablePaths": [
     "supabase/functions"
   ],
@@ -23,5 +24,5 @@
     "fs",
     "http",
     "net"
-  ]
+  ],
 }

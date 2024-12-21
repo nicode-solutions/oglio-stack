@@ -24,6 +24,7 @@ pnpx supabase gen types typescript --project-id "$PROJECT_REF" --schema public >
 ssh -R 80:localhost:3000 nokey@localhost.run
 ```
 
+Add supabase_url secret to ./supabase/seed.sql. We will use this to query our Edge Functions within our local environment. In production, set this to your Supabase project's API URL.
 
 ### Notes for v0.1.0
 
