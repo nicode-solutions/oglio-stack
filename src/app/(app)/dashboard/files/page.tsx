@@ -1,12 +1,32 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
 import { createClient } from '@/utils/supabase/client';
+import { useQuery } from '@tanstack/react-query';
+// import { useRouter } from 'next/navigation';
 
 export default function FilesPage() {
-    const documents: any[] = [];
-
     const supabase = createClient();
+    // const router = useRouter();
+
+    const { data: documents } = useQuery({
+        queryKey: ['files'], queryFn: async () => {
+            const { data, error } = await supabase
+                .from('documents_with_storage_path')
+                .select();
+
+            if (error) {
+                toast({
+                    variant: 'destructive',
+                    description: 'Failed to fetch documents',
+                });
+                throw error;
+            }
+
+            return data;
+        }
+    });
 
     return (
         <div>
@@ -19,9 +39,23 @@ export default function FilesPage() {
                         const selectedFile = e.target.files?.[0];
 
                         if (selectedFile) {
-                            await supabase.storage
+                            const { error } = await supabase.storage
                                 .from('files')
-                                .upload(`${crypto.randomUUID()}/${selectedFile.name}`, selectedFile);
+                                .upload(
+                                    `${crypto.randomUUID()}/${selectedFile.name}`,
+                                    selectedFile
+                                );
+
+                            if (error) {
+                                toast({
+                                    variant: 'destructive',
+                                    description:
+                                        'There was an error uploading the file. Please try again.',
+                                });
+                                return;
+                            }
+
+                            // router.push('/chat');
                         }
                     }}
                 />
@@ -29,10 +63,24 @@ export default function FilesPage() {
             {documents && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
                     {documents.map((document) => (
+                        // eslint-disable-next-line react/jsx-key
                         <div
+                            key={document.id}
                             className="flex flex-col gap-2 justify-center items-center border rounded-md p-4 sm:p-6 text-center overflow-hidden cursor-pointer hover:bg-slate-100"
                             onClick={async () => {
-                                // TODO: download file from supabase storage
+                                const { data, error } = await supabase.storage
+                                    .from('files')
+                                    .createSignedUrl(document.storage_object_path, 60);
+
+                                if (error) {
+                                    toast({
+                                        variant: 'destructive',
+                                        description: 'Failed to download file. Please try again.',
+                                    });
+                                    return;
+                                }
+
+                                window.location.href = data.signedUrl;
                             }}
                         >
                             <svg

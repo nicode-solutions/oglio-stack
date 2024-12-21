@@ -6,10 +6,9 @@
     "editor.formatOnSave": false
   },
   "deno.enable": true,
-  "deno.enablePaths": [
-    "supabase/functions"
-  ],
+  "deno.enablePaths": ["supabase/functions"],
   "deno.lint": true,
+  "deno.importMap": "supabase/functions/import_map.json",
   "deno.unstable": [
     "bare-node-builtins",
     "byonm",
@@ -24,5 +23,5 @@
     "fs",
     "http",
     "net"
-  ],
+  ]
 }

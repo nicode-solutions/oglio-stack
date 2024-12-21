@@ -1,8 +1,8 @@
-import { fromMarkdown } from "mdast-util-from-markdown";
-import { toMarkdown } from "mdast-util-to-markdown";
-import { toString } from "mdast-util-to-string";
-import type { Root } from "mdast";
-import { u } from "unist-builder";
+import { Root, RootContent } from 'mdast';
+import { fromMarkdown } from 'mdast-util-from-markdown';
+import { toMarkdown } from 'mdast-util-to-markdown';
+import { toString } from 'mdast-util-to-string';
+import { u } from 'unist-builder';
 
 export type Json = Record<
     string,
