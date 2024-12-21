@@ -40,8 +40,7 @@ somehow this token should be used to authenticate the user when the user is redi
 
 #### Lemonsqueezy integration
 - Change plan
+- Middleware or singleton to check subscription
 
 #### TanStack Query
 - https://tanstack.com/query/latest/docs/framework/react/guides/ssr
-
-#### Error handling
